@@ -19,7 +19,7 @@ def load_field(fileglob='CK1_A01_1_*.tif'):
     return field
 
 def show_panels(field):
-    (w, h, d) = field.shape
+    (h, w, d) = field.shape
     panels = np.ravel(field.transpose(2,1,0), 'C').reshape(w*d,h).transpose(1,0)
     plt.imshow(panels, vmin=0, vmax=2**16-1)
 
@@ -51,7 +51,7 @@ def show_histograms(field):
     plt.xlim(0, bins[-2])
 
 def auto_contrast(field):
-    (w, h, d) = field.shape
+    (h, w, d) = field.shape
 
     # initial pre-scaling to help background calculation resolution
     peak = scoreatpercentile(field.reshape(w*h, d), 99.9)
