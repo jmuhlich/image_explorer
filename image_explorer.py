@@ -19,8 +19,11 @@ def show_panels(field):
     plt.imshow(panels, vmin=0, vmax=2**16-1)
 
 def show_pseudocolor(field):
-    if field.shape[2] != 3:
-        warnings.warn('field does not contain exactly 3 channels')
+    assert field.shape[2] in (2, 3), 'field must have 2 or 3 channels'
+    # Pad 2-channel images with an empty 3rd channel.
+    if field.shape[2] == 2:
+        empty_image = np.zeros(field.shape[0:2], dtype=field.dtype)
+        field = np.dstack((field, empty_image))
     plt.imshow(field/float(2**16), vmin=0.0, vmax=1.0)
     plt.gca().xaxis.set_label_position('top')
 
