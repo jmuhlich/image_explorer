@@ -10,17 +10,12 @@ def load_field(fileglob='CK1_A01_1_*.tif'):
     assert len(filenames) > 0, 'tiff files not found'
     imlist = [Image.open(f) for f in filenames]
     # field will be Width * Height * Channels
-    field = np.array(
-        [np.array(im.getdata(), dtype=np.uint16).
-         reshape(tuple(reversed(im.size)))
-         for im in imlist]
-        )
-    field = field.transpose(1,2,0)
+    field = np.dstack([np.array(im) for im in imlist])
     return field
 
 def show_panels(field):
     (h, w, d) = field.shape
-    panels = np.ravel(field.transpose(2,1,0), 'C').reshape(w*d,h).transpose(1,0)
+    panels = field.transpose(2,1,0).reshape(w*d,h).transpose(1,0)
     plt.imshow(panels, vmin=0, vmax=2**16-1)
 
 def show_pseudocolor(field):
